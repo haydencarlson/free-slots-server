@@ -1,3 +1,10 @@
+const symbols = [
+  'strawberry',
+  'apple',
+  'orange',
+  'grapes',
+];
+
 const payTable = {
   rstar: 0.05,
   star: 0.02,
@@ -8,14 +15,6 @@ const payTable = {
   pineapple: 0.005,
   orange: 0.005
 };
-
-const symbols = [
-  "strawberry",
-  "apple",
-  "orange",
-  "grapes",
-];
-
 
 function generateRandomSpin() {
   return Array.from({ length: 5 }, () => Array.from({ length: 3 }, () => symbols[Math.floor(Math.random() * symbols.length)]));
@@ -49,6 +48,7 @@ function checkForWinningSymbol(spin) {
   return winningSymbol;
 };
 
+// Returns the pay for the winning symbol
 function getPayForSymbol(symbol) {
   return payTable[symbol];
 }
