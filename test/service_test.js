@@ -2,7 +2,6 @@ const assert = require('assert');
 const { checkForWinningSymbol } = require('../service');
 
 describe('checkForWinningSymbol', () => {
-
   it('should return false if no winning symbol', () => {
     const spin = [
       ['banana', 'apple', 'orange'],
@@ -36,7 +35,7 @@ describe('checkForWinningSymbol', () => {
       ['rstar', 'pineapple', 'star']
     ];
     try {
-      const result = checkForWinningSymbol(spin);
+      checkForWinningSymbol(spin);
     } catch(e) {
       assert.equal(e.message, 'Reel contains null symbol');
     }

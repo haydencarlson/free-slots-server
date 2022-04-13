@@ -1,20 +1,23 @@
+const axios = require('axios');
+
 const symbols = [
   'strawberry',
   'apple',
   'orange',
-  'grapes',
+  'grapes'
 ];
 
 const payTable = {
-  rstar: 0.05,
-  star: 0.02,
-  grapes: 0.015,
-  banana: 0.01,
-  apple: 0.01,
-  strawberry: 0.008,
-  pineapple: 0.005,
+  grapes: 0.008,
+  apple: 0.006,
+  strawberry: 0.005,
   orange: 0.005
 };
+
+async function getLitecoinPrice() {
+  const { data } = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=litecoin&vs_currencies=usd')
+  return data['litecoin']['usd'];
+}
 
 function generateRandomSpin() {
   return Array.from({ length: 5 }, () => Array.from({ length: 3 }, () => symbols[Math.floor(Math.random() * symbols.length)]));
@@ -48,13 +51,33 @@ function checkForWinningSymbol(spin) {
   return winningSymbol;
 };
 
-// Returns the pay for the winning symbol
-function getPayForSymbol(symbol) {
-  return payTable[symbol];
+// Returns the pay for the winning symbol in LTC
+async function getPayForSymbol(symbol) {
+  const ltcPrice = await getLitecoinPrice();
+  if (!ltcPrice || ltcPrice <= 0) throw new Error(`Litecoin price is 0`);
+  return payTable[symbol] / ltcPrice;
 }
+
+(async() => {
+  console.log('Running test pay per day...');
+  const ltcPrice = await getLitecoinPrice();
+  let totalWins = 0;
+  let totalPay = 0;
+  for (let i = 1; i < 34560; i++) {
+    const spin = generateRandomSpin();
+    const winningSymbol = checkForWinningSymbol(spin);
+    if (winningSymbol) {
+      const pay = payTable[winningSymbol] / ltcPrice;
+      totalPay += pay;
+      totalWins++;
+    }
+  }
+  console.log(`Total Pay: ${totalPay} Total Wins: ${totalWins}`);
+})();
 
 module.exports = {
   generateRandomSpin,
   checkForWinningSymbol,
-  getPayForSymbol
+  getPayForSymbol,
+  getLitecoinPrice
 }

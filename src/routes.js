@@ -20,7 +20,7 @@ module.exports = (io) => {
       const winningSymbol = service.checkForWinningSymbol(randomSpin);
       if (winningSymbol) {
         const Users = new users();
-        const pay = service.getPayForSymbol(winningSymbol);
+        const pay = await service.getPayForSymbol(winningSymbol);
         const user = await Users.updateBalance(ip, pay);
         const newBalance = round(user.value.balance + pay);
         console.log(`Winning Symbol: ${winningSymbol} IP: ${ip} Pays: ${pay} Balance Now: ${newBalance}`);
@@ -28,6 +28,7 @@ module.exports = (io) => {
       }
       res.json(randomSpin);
     } catch(e) {
+      console.log(e);
       res.status(500);
     }
   });
