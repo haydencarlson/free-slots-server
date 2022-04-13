@@ -8,10 +8,10 @@ const symbols = [
 ];
 
 const payTable = {
-  grapes: 0.008,
-  apple: 0.006,
-  strawberry: 0.005,
-  orange: 0.005
+  grapes: 0.001,
+  apple: 0.001,
+  strawberry: 0.001,
+  orange: 0.001
 };
 
 async function getLitecoinPrice() {
